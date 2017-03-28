@@ -1,3 +1,13 @@
+//#define USEDEBUG
+
+#ifdef USEDEBUG
+#define D(x)    cout << x << endl
+#define printMap    for(i = 0; i < 44; i++) {   for(j = 0; j < 52; j++) cout << map[i][j];  cout << endl;}
+#else
+#define D(x)
+#define printMap
+#endif
+
 //Standard includes
 #include <iostream>
 #include <sstream>
@@ -43,28 +53,29 @@ int main()
     {
         //Read the game status from server
         string rawInput;
-        vector<int> firstLine;   //First line will contain {time left, current mana, Troops in hand}
-        while(getline(cin, rawInput, ' ')) {
-            firstLine.push_back(atoi(rawInput.c_str()));
-        }
 
-        vector<vector<string>> map;     //map contains the game map drawn two times. The first time showing the Troops' position indicated with their ids. The second time showing their remaining hp
+        int troopIdx[4];   //First line will contain {time left, current mana, Troops in hand}
+        cin >> timeLeft >> mana >> troopIdx[0] >> troopIdx[1] >> troopIdx[2] >> troopIdx[3];
+
+
+        char map[44][53];     //map contains the game map drawn two times. The first time showing the Troops' position indicated with their ids. The second time showing their remaining hp
         for(i = 0; i < 44; i++) {       //first map from 0 to 21. Second part from 22 to 43
-            map.push_back(vector<string>());
-
-            while(getline(cin, rawInput, ' ')) {
-                map[i].push_back(rawInput);
+            getline(cin, rawInput);
+            for(j = 0; j < (signed)rawInput.length() && j < 53; j++) {
+                map[i][j] = rawInput[j];
+                j++;
             }
         }
 
+        D("");
+        printMap
+
         //Proccess the inputed data
         //Get information from the first line
-        timeLeft = firstLine[0];
-        mana = firstLine[1];
-        hand[0] = allTroops[firstLine[2] - 1];
-        hand[1] = allTroops[firstLine[3] - 1];
-        hand[2] = allTroops[firstLine[4] - 1];
-        hand[3] = allTroops[firstLine[5] - 1];
+        hand[0] = allTroops[troopIdx[0] - 1];
+        hand[1] = allTroops[troopIdx[1] - 1];
+        hand[2] = allTroops[troopIdx[2] - 1];
+        hand[3] = allTroops[troopIdx[3] - 1];
 /*
         //Get map information
         enemyTroops = trackEnemies(map, enemyTroops, timeLeft);

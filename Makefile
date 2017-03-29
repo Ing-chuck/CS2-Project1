@@ -15,7 +15,7 @@ OBJECTS       = main.o \
 		troop.o \
 		point.o
 
-TARGET        = p1_ai
+TARGET        = main
 
 ####### Build rules
 

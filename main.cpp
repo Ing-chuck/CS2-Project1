@@ -1,16 +1,19 @@
-//#define USEDEBUG
+#define USEDEBUG
 
 #ifdef USEDEBUG
 #define D(x)    cout << x << endl
 #define printMap    for(i = 0; i < 44; i++) {   for(j = 0; j < 52; j++) cout << map[i][j];  cout << endl;}
+#define printHand   for(i = 0; i < 4; i++)  cout << hand[i].get_id(); cout << endl;
 #else
 #define D(x)
 #define printMap
+#define printHand
 #endif
 
 //Standard includes
 #include <iostream>
 #include <sstream>
+#include <algorithm>
 #include <vector>
 #include <random>
 #include <time.h>
@@ -20,6 +23,8 @@
 #include "point.h"
 
 using namespace std;
+
+bool troopCompareStrenght(Troop t1, Troop t2);
 
 int main()
 {
@@ -67,34 +72,24 @@ int main()
             }
         }
 
-        D("");
-        printMap
-
         //Proccess the inputed data
         //Get information from the first line
         hand[0] = allTroops[troopIdx[0] - 1];
         hand[1] = allTroops[troopIdx[1] - 1];
         hand[2] = allTroops[troopIdx[2] - 1];
         hand[3] = allTroops[troopIdx[3] - 1];
+
+        //Order Topps in hand by strenght
+        sort(hand, hand+4, troopCompareStrenght);
 /*
         //Get map information
         enemyTroops = trackEnemies(map, enemyTroops, timeLeft);
         myTroops = trackAllies(map, myTroops, timeLeft);
 */
-        //Order Topps in hand by strenght
-        for(i = 1; i < 4; i++) {
-            Troop x = hand[i];
-            j = i - 1;
-            while(j >= 0 && x.get_risk() > hand[j].get_risk()) {
-                hand[j+1] = hand[j];
-                j--;
-            }
-            hand[j] = x;
-        }
 
         //Invoke the all posible Troops
         for(i = 0; i < 4; i++) {
-            if(mana > hand[i].get_cost()){
+            if(mana >= hand[i].get_cost()){
                 spawn = spawnPoints[spawn_cnt(rng)];
                 cout << "1 " << hand[i].get_id() << " " << spawn.x << " " << spawn.y << endl;
                 mana -= hand[i].get_cost();
@@ -107,6 +102,13 @@ int main()
 
     return 0;
 }
+
+//returns true if t1 is stronger than t2
+bool troopCompareStrenght(Troop t1, Troop t2)
+{
+    return t1.get_risk() > t2.get_risk();
+}
+
 /*
 ///Return vector containing enemy troops found in the map, uses an old version of said vector and time to track movement
 vector<Troop> trackEnemies(vector<vector<string>> map, vector<Troop> old, int time) {

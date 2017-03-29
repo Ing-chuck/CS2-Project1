@@ -3,8 +3,6 @@
 //Constructors
 Troop::Troop()
 {
-    name = "";
-    faction = "";
     id = 0;
     cost = 0;
     speed = 0;
@@ -18,16 +16,15 @@ Troop::Troop()
 
 }
 
-Troop::Troop(std::string str, std::string f, int n, int c, int s, int a, int r, int h) {
-    name = str;
-    faction = f;
+Troop::Troop(int n, int c, int s, int a, int r, int h) {
     id = n;
+    name = get_name();
     cost = c;
     speed = s;
     attack = a;
     range = r;
     hp_max = h;
-    riskMultiplier = attack * speed / range;
+    riskMultiplier = attack * (speed + range) / 100;
 
     set_hp_current(hp_max);
     set_risk(riskMultiplier * hp_current);
@@ -35,11 +32,28 @@ Troop::Troop(std::string str, std::string f, int n, int c, int s, int a, int r, 
 
 //getters
 std::string Troop::get_name() {
-    return name;
-}
-
-std::string Troop::get_faction() {
-    return faction;
+    if(name != "")
+        return name;
+    switch(id)    {
+    case 1:     return "Human Knight";
+                break;
+    case 2:     return "Human Priest";
+                break;
+    case 3:     return "Human Assassin";
+                break;
+    case 4:     return "Elf Giant";
+                break;
+    case 5:     return "Elf Wisp";
+                break;
+    case 6:     return "Elf Archer";
+                break;
+    case 7:     return "Undead Samurai";
+                break;
+    case 8:     return "Sgram";
+                break;
+    default:    return "Unknown";
+                break;
+    }
 }
 
 int Troop::get_id() {

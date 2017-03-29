@@ -7,10 +7,9 @@ class Troop
 {
 public:
     Troop();
-    Troop(std::string str, std::string f, int n, int c, int s, int a, int r, int h);
+    Troop(int n, int c, int s, int a, int r, int h);
 
     std::string get_name();
-    std::string get_faction();
     int get_id();
     int get_cost();
     int get_speed();
@@ -26,9 +25,10 @@ public:
     void set_risk(float value);
     void set_pos(int x, int y);
 
+    bool isEnemy = false;
+
 private:
-    std::string name;
-    std::string faction;
+    std::string name = "";
     int id;
     int cost;
     int speed;

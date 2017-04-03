@@ -29,7 +29,7 @@ clean:
 
 ####### Compile
 
-main.o: main.cpp troop.h point.h
+main.o: main.cpp troop.h tower.h point.h
 	$(CXX) -c $(CXXFLAGS) -o main.o main.cpp
 
 troop.o: troop.cpp troop.h point.h

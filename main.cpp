@@ -66,7 +66,7 @@ int main()
     }
 
     //Select the Troops to use (first 4 will be in hand at start)
-    cout << "1 2 3 7 9 6 A 8" << endl;
+    cout << "1 2 3 7 9 6 4 8" << endl;
 
     //Game Loop
     while(true)

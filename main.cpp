@@ -1,15 +1,3 @@
-#define USEDEBUG
-
-#ifdef USEDEBUG
-#define D(x)    cout << x << endl
-#define printMap    for(i = 0; i < 44; i++) {   for(j = 0; j < 52; j++) cout << map[i][j];  cout << endl;}
-#define printHand   for(i = 0; i < 4; i++)  cout << hand[i].get_id(); cout << endl;
-#else
-#define D(x)
-#define printMap
-#define printHand
-#endif
-
 //Standard includes
 #include <iostream>
 #include <sstream>
@@ -45,9 +33,9 @@ int main()
     Troop hand[4];
     vector<double> area_risk(10);
     vector<Troop> enemyTroops;
-    tower enemyTowers[3];
+    tower enemyTowers[3] = {{1, true}, {2, true}, {3, true}};
     vector<Troop> myTroops;
-    tower myTowers[3];
+    tower myTowers[3] = {{1, false}, {2, false}, {3, false}};
     point spawn;
 
 
@@ -58,15 +46,8 @@ int main()
                          {'7'}, {'8'}, {'9'},
                          {'A'}, {'B'}, {'C'}};
 
-    //Initialice towers
-    for(i = 0; i < 3; i++)
-    {
-        enemyTowers[i] = tower(i + 1, true);
-        myTowers[i] = tower(i + 1, false);
-    }
-
     //Select the Troops to use (first 4 will be in hand at start)
-    cout << "1 2 3 7 9 6 4 8" << endl;
+    cout << "1 2 3 7 4 6 8 9" << endl;
 
     //Game Loop
     while(true)
@@ -74,7 +55,8 @@ int main()
         //Read the game status from server
         string rawInput;
 
-        char troopId[4];   //First line will contain {time left, current mana, Troops in hand}
+        //First line will contain {time left, current mana, Troops in hand}
+        char troopId[4];
         cin >> timeLeft >> mana >> troopId[0] >> troopId[1] >> troopId[2] >> troopId[3];
         getline(cin, rawInput); //flush cin buffer
 
@@ -91,7 +73,7 @@ int main()
         hand[2] = allTroops[charToInt(troopId[2]) - 1];
         hand[3] = allTroops[charToInt(troopId[3]) - 1];
 
-        //Order Topps in hand by strenght
+        //Order Troops in hand by strenght
         sort(hand, hand+4, troopCompareStrenght);
 
         //Get map information
@@ -178,6 +160,8 @@ int main()
                 cout << "1 " << hand[i].get_id() << " " << spawn.x + i << " " << spawn.y << endl;
                 mana -= hand[i].get_cost();
             }
+            else if(hand[i].get_cost() - mana <= 2) //if we need little mana for summon, wait
+                break;
         }
 
         cout << "0" << endl;

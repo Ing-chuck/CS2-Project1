@@ -6,10 +6,10 @@ class point
 {
 public:
     point();
-    point(int value1, int value2);
+    point(double value1, double value2);
 
-    int x;
-    int y;
+    double x;
+    double y;
 };
 
 #endif // POINT_H

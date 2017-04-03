@@ -6,7 +6,7 @@ point::point()
     y = 0;
 }
 
-point::point(int value1, int value2)
+point::point(double value1, double value2)
 {
     x = value1;
     y = value2;

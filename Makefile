@@ -3,17 +3,19 @@
 ####### Compiler, tools and options
 
 CXX           = g++
-CXXFLAGS      = -std=gnu++11 -Wall
+CXXFLAGS      = -std=gnu++11 -Wall -g
 DEL_FILE      = rm -f
 
 ####### Files
 
 SOURCES       = main.cpp \
 		troop.cpp \
-		point.cpp 
+		point.cpp \
+		tower.cpp
 OBJECTS       = main.o \
 		troop.o \
-		point.o
+		point.o \
+		tower.o
 
 TARGET        = main
 
@@ -32,6 +34,9 @@ main.o: main.cpp troop.h point.h
 
 troop.o: troop.cpp troop.h point.h
 	$(CXX) -c $(CXXFLAGS) -o troop.o troop.cpp
+
+tower.o: tower.cpp tower.h point.h
+	$(CXX) -c $(CXXFLAGS) -o tower.o tower.cpp
 
 point.o: point.cpp point.h
 	$(CXX) -c $(CXXFLAGS) -o point.o point.cpp

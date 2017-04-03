@@ -37,7 +37,7 @@ int main()
     //random number generation
     unsigned seed = time(NULL);
     default_random_engine rng(seed);
-    uniform_int_distribution<int> spawn_cnt(0, 5);  //range for random number engine, from 0 to last index of spawn_points
+    uniform_int_distribution<int> spawn_cnt(0 , 5);  //range for random number engine, from 0 to last index of spawn_points
 
     unsigned int i;
     int timeLeft, mana, risk_idx;
@@ -51,7 +51,7 @@ int main()
     point spawn;
 
 
-    vector<point> spawnPoints = {{3, 22}, {8, 22}, {13, 22}, {18, 22}, {5, 12}, {16, 12}};
+    vector<point> spawnPoints = {{3, 22}, {8, 22}, {13, 22}, {18, 22}, {5, 12}, {16, 12}, {9, 3}, {12, 3}};
 
     Troop allTroops[] = {{'1'}, {'2'}, {'3'},
                          {'4'}, {'5'}, {'6'},
@@ -160,8 +160,14 @@ int main()
         //Invoke the all posible Troops
         for(i = 0; i < 4; i++) {
             if(mana >= hand[i].get_cost()){
+                //if we are to summon an Elf dancer, put it behind the castle;
+                if(hand[i].get_id() == '9')
+                {
+                    usableSpawn = {spawnPoints[6], spawnPoints[7]};
+                    spawn_cnt = uniform_int_distribution<int> (0, usableSpawn.size() - 1);
+                }
                 spawn = usableSpawn[spawn_cnt(rng)];
-                cout << "1 " << hand[i].get_id() << " " << spawn.x << " " << spawn.y << endl;
+                cout << "1 " << hand[i].get_id() << " " << spawn.x + i << " " << spawn.y << endl;
                 mana -= hand[i].get_cost();
             }
         }

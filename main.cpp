@@ -51,7 +51,7 @@ int main()
     point spawn;
 
 
-    vector<point> spawnPoints = {{3, 22}, {8, 22}, {13, 22}, {18, 22}, {5, 12}, {16, 12}, {9, 3}, {12, 3}};
+    vector<point> spawnPoints = {{3, 22}, {8, 22}, {13, 22}, {18, 22}, {5, 12}, {16, 12}, {9, 2}, {12, 2}};
 
     Troop allTroops[] = {{'1'}, {'2'}, {'3'},
                          {'4'}, {'5'}, {'6'},
@@ -98,6 +98,7 @@ int main()
         area_risk = scanMap(map, myTroops, enemyTroops, myTowers, enemyTowers, timeLeft);
 
         //Determine which area has the biggest risk
+        risk_idx = -1;  //no index
         for(i = 0; i < area_risk.size(); i++)
         {
             if(area_risk[i] > risk_max)
@@ -108,10 +109,15 @@ int main()
         }
 
         //if all areas have negative risk, our troops outpower the enemys', we can wait if necessary
-        if(risk_max < 0 && mana < hand[i].get_cost())
+        if(risk_max <= 0)
         {
-            cout << "0" << endl;
-            continue;
+            if(mana < hand[0].get_cost())
+            {
+                cout << "0" << endl;
+                continue;
+            }
+            else
+                risk_idx = -1;
         }
 
         //else we spawn troops on the area with the biggest risk
@@ -153,6 +159,8 @@ int main()
             break;
         default:
             usableSpawn = spawnPoints;
+            usableSpawn.pop_back();
+            usableSpawn.pop_back();
             break;
         }
         spawn_cnt = uniform_int_distribution<int> (0, usableSpawn.size() - 1);
